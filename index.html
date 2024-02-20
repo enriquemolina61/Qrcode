@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leitor de QR Code</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      /* background-color: rgb(7,64,133, 0.8);     */
+    }
+
+    #logo {
+      width: 300px; /* Tamanho da logo */
+      height: auto;
+      margin-bottom: 20px; /* Espaçamento abaixo da logo */
+    }
+
+    #video {
+      width: 300px; /* Largura do vídeo */
+      height: auto;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.0.2/dist/jsQR.js"></script>
+</head>
+<body>
+  <img src="\\10.25.8.9\arquivos\TI\Logos\logo_hsjb.jpg" alt="Logo" id="logo">
+  <h1>Leitor de QR Code</h1>
+  <video id="video" width="500" height="400" autoplay></video>
+  <canvas id="canvas" width="500" height="400" style="display:none;"></canvas>
+
+  <script>
+    
+    // Obtém acesso à câmera
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+      .then(function(stream) {
+        var video = document.getElementById('video');
+        video.srcObject = stream;
+        video.onloadedmetadata = function() {
+          scanQrCode();
+        };
+      });
+
+    // Função para escanear QR code
+    function scanQrCode() {
+      var video = document.getElementById('video');
+      var canvas = document.getElementById('canvas');
+      var context = canvas.getContext('2d');
+
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      // Decodifica o QR code do contexto do canvas
+      var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+      var code = jsQR(imageData.data, imageData.width, imageData.height);
+
+      if (code) {
+        // Extrai apenas o link do QR code
+        var link = extractLink(code.data);
+        
+        // Abre o link do QR code na mesma aba
+        window.open(link);
+        window.location.reload();
+      } else {
+        // Tenta novamente após 1 segundo
+        setTimeout(scanQrCode, 1000);
+      }
+    }
+
+    // Função para extrair apenas o link válido
+    function extractLink(data) {
+      var regex = /(http?:\/\/[^\s]+)/;
+      var match = data.match(regex);
+      return match ? match[0] : '';
+    }
+    
+  </script>
+</body>
+</html>
