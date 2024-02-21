@@ -12,28 +12,31 @@
       justify-content: center;
       height: 100vh;
       margin: 0;
+      color: rgb(7,64,133, 0.8);
       /* background-color: rgb(7,64,133, 0.8);     */
     }
 
     #logo {
-      width: 300px; /* Tamanho da logo */
+      width: 400px; /* Tamanho da logo */
       height: auto;
       margin-bottom: 20px; /* Espaçamento abaixo da logo */
+      background-color: white;
     }
 
     #video {
       width: 300px; /* Largura do vídeo */
       height: auto;
+      border: 5px solid rgb(7,64,133, 0.8); /* Borda do vídeo */
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/jsqr@1.0.2/dist/jsQR.js"></script>
 </head>
 <body>
-  <img src="logo_hsjb.jpg" alt="Logo" id="logo">
+  <img src="logo_hsjb.jpg" alt="Logo" id="logo" >
   <h1>Leitor de QR Code</h1>
-  <video id="video" width="500" height="400" autoplay></video>
+  <video id="video" width="600" height="600" autoplay></video>
   <canvas id="canvas" width="500" height="400" style="display:none;"></canvas>
-
+  <h3>Setor Informática - HSJB</h3>
   <script>
     
     // Obtém acesso à câmera
@@ -72,6 +75,7 @@
         // Tenta novamente após 1 segundo
         setTimeout(scanQrCode, 1000);
       }
+      
     }
 
     // Função para extrair apenas o link válido
